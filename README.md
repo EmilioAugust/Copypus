@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="app/src/main/res/drawable/clipboard_icon.png" alt="текст" width="250">
+  <img src="app/src/main/res/drawable/clipboard_icon.png" alt="текст" width="150">
 </p>
