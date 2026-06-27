@@ -3,5 +3,5 @@
 </p>
 
 <h1 align="center">
-  
+  Copypus
 </h1>
