@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Copypus</string>
+    <string name="topbar_copypus">Copypus</string>
+    <string name="topbar_favorites">Favorites</string>
+    <string name="topbar_settings">Settings</string>
+    <string name="title_appearance_settings">THEME</string>
+    <string name="title_preferences_settings">PREFERENCES</string>
+</resources>
