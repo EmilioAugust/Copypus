@@ -3,5 +3,5 @@
 </p>
 
 <p align="center">
-# Copypus
+  <font size="40"><b>Copypus</b></font>
 </p>
