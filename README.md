@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=fff&style=for-the-badge" alt="Jetpack Compose"/>
 </a>
 </div>
-
+---
 <p align="center">
-Copypus automatically saves everything you copy – links, text snippets, code
+<b>Copypus automatically saves everything you copy – links, text snippets, code</b>
 </p>
