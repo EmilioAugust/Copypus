@@ -17,6 +17,6 @@
 </a>
 </div>
 
-<p>
+<p align="center">
 Copypus automatically saves everything you copy – links, text snippets, code
 </p>
