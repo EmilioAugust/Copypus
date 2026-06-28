@@ -15,6 +15,8 @@
 <a href="https://developer.android.com/compose">
   <img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=fff&style=for-the-badge" alt="Jetpack Compose"/>
 </a>
-
-  
 </div>
+
+<p>
+Copypus automatically saves everything you copy – links, text snippets, code
+</p>
