@@ -27,9 +27,10 @@
     <img src="app/src/main/res/drawable/card_screen.jpg" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/add_favorites.gif" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/settings_screen_dark.jpg" alt="Clipboards" style="width: 325px">
+    <img src="app/src/main/res/drawable/cards_favorites_dark.jpg" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/delete_clipboard.gif" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/empty_favorites.jpg" alt="Clipboards" style="width: 325px">
-    <img src="app/src/main/res/drawable/cards_favorites_dark.jpg" alt="Clipboards" style="width: 325px">
+    
     
 </div>
 
