@@ -36,13 +36,13 @@
 </h2>
 
 - **Automatic Clipboard Saving** 
-  - Anything copied in other apps is automatically detected and saved when you open the app.
+- Anything copied in other apps is automatically detected and saved when you open the app.
 
 - **Favorites Support**
-  * Swipe right to add items to favorites and access them anytime in a dedicated Favorites tab.
+- Swipe right to add items to favorites and access them anytime in a dedicated Favorites tab.
 
 - **Quick Delete Gestures**
-  * Swipe left to instantly remove unnecessary clipboard items.
+ - Swipe left to instantly remove unnecessary clipboard items.
 
 * **One-Tap Copying**
   Easily copy saved content back to your clipboard with a dedicated copy button.
