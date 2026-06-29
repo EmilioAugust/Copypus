@@ -60,7 +60,7 @@
   - Choose the app theme that fits your style in Settings.
 
 - **Auto-Delete Options**
-  Automatically remove old clipboard items after:
+  - Automatically remove old clipboard items after:
     * 1 hour
     * 5 hours
     * 1 day
@@ -69,7 +69,7 @@
     * or never
 
 - **Bottom Navigation**
-  Simple bottom navigation for quick access to:
+  - Simple bottom navigation for quick access to:
 
     * Clipboard History
     * Favorites
