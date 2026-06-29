@@ -91,3 +91,9 @@
     * Favorites
     * Settings
 
+<hr />
+
+<h2 align="center">
+📄 License
+</h2>
+This project is licensed under the MIT License — see the <a href="https://github.com/EmilioAugust/Copypus/blob/main/LICENSE">LICENSE</a> file for details
