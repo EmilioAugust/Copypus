@@ -22,8 +22,14 @@
 </p>
 
 <hr />
-
-
+<div>
+    <img src="app/src/main/res/drawable/card_screen.jpg" alt="Clipboards">
+    <img src="app/src/main/res/drawable/empty_screen.jpg" alt="Clipboards">
+    <img src="app/src/main/res/drawable/empty_favorites.jpg" alt="Clipboards">
+</div>
+<div>
+    <img src="app/src/main/res/drawable/settings_screen.jpg" alt="Clipboards">
+</div>
 
 <hr />
 
