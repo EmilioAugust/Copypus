@@ -36,13 +36,14 @@
 
 
 <hr />
-<h1 align="center">
-  Download
-</h1>
-<a href="https://github.com/EmilioAugust/Copypus/releases">
-<img src="https://user-images.githubusercontent.com/69304392/148696068-0cfea65d-b18f-4685-82b5-329a330b1c0d.png"
-alt="Get it on GitHub" align="center" height="80" /></a>
-
+<div align="center">
+  <h1>
+    Download
+  </h1>
+  <a href="https://github.com/EmilioAugust/Copypus/releases">
+  <img src="https://user-images.githubusercontent.com/69304392/148696068-0cfea65d-b18f-4685-82b5-329a330b1c0d.png"
+  alt="Get it on GitHub" align="center" height="80" /></a>
+</div>
 <hr />
 
 <h2 align="center">
