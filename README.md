@@ -23,16 +23,11 @@
 
 <hr />
 <div align="center">
-    <img src="app/src/main/res/drawable/card_screen.jpg" alt="Clipboards" style="width: 250px; border: 1px #32a1ce solid">
-    <table>
-    <tr>
-    <td>
-    <img src="app/src/main/res/drawable/empty_screen.jpg" width="250"/>
-    </td>
-    </tr>
-    </table>
-    <img src="app/src/main/res/drawable/empty_favorites.jpg" alt="Clipboards" style="width: 250px">
-    <img src="app/src/main/res/drawable/settings_screen.jpg" alt="Clipboards" style="width: 250px">
+    <img src="app/src/main/res/drawable/card_screen.jpg" alt="Clipboards" style="width: 300px; border: 1px #32a1ce solid">
+    <img src="app/src/main/res/drawable/empty_screen_dark.jpg" alt="Clipboards" style="width: 300px">
+    <img src="app/src/main/res/drawable/empty_favorites.jpg" alt="Clipboards" style="width: 300px">
+    <img src="app/src/main/res/drawable/cards_favorites_dark.jpg" alt="Clipboards" style="width: 300px">
+    <img src="app/src/main/res/drawable/settings_screen.jpg" alt="Clipboards" style="width: 300px">
 
 </div>
 
