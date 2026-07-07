@@ -1,14 +1,21 @@
 package com.emilioaugust.copypus
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.lifecycleScope
+import com.emilioaugust.copypus.data.AppLanguage
 import com.emilioaugust.copypus.data.MainViewModel
 import com.emilioaugust.copypus.data.SettingsDataStore
 import com.emilioaugust.copypus.data.SettingsViewModel
@@ -16,9 +23,11 @@ import com.emilioaugust.copypus.data.SettingsViewModelFactory
 import com.emilioaugust.copypus.ui.screens.MainScreen
 import com.emilioaugust.copypus.ui.theme.ClipboardTheme
 import com.emilioaugust.copypus.ui.theme.ThemeMode
+import com.emilioaugust.copypus.utils.LocaleHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
@@ -27,11 +36,24 @@ class MainActivity : ComponentActivity() {
             SettingsDataStore(applicationContext)
         )
     }
+
     private lateinit var clipboardHelper: ClipboardManagerHelper
+    private lateinit var settingsDataStore: SettingsDataStore
+
+    override fun attachBaseContext(newBase: Context) {
+        val context = runBlocking {
+            val dataStore = SettingsDataStore(newBase)
+            val lang = dataStore.getAppLanguage()
+            LocaleHelper.setLocale(newBase, lang.code)
+        }
+        super.attachBaseContext(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         clipboardHelper = ClipboardManagerHelper(this)
+        settingsDataStore = SettingsDataStore(applicationContext)
         setContent {
             val themeMode by settingsViewModel.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
             val darkTheme = when(themeMode) {
@@ -40,6 +62,20 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.SYSTEM ->
                     isSystemInDarkTheme()
             }
+            val language by settingsViewModel.language.collectAsState()
+
+            LaunchedEffect(language) {
+
+                val locales =
+                    if (language == AppLanguage.SYSTEM) {
+                        LocaleListCompat.getEmptyLocaleList()
+                    } else {
+                        LocaleListCompat.forLanguageTags(language.code)
+                    }
+
+                AppCompatDelegate.setApplicationLocales(locales)
+            }
+
             ClipboardTheme(darkTheme = darkTheme) {
                 MainScreen(viewModel, settingsViewModel)
             }
@@ -53,8 +89,15 @@ class MainActivity : ComponentActivity() {
                 viewModel.cleanupOldItems(option)
             }
             delay(250)
-            clipboardHelper
-                .getCurrentClipboardData()
+
+            val pausedUntil = settingsDataStore.pausedUntilFlow.first()
+            if (pausedUntil != 0L && System.currentTimeMillis() > pausedUntil) {
+                settingsDataStore.setMonitoringEnabled(true)
+            }
+            val monitoringEnabled = settingsDataStore.monitoringEnabledFlow.first()
+            if (!monitoringEnabled) return@launch
+
+            clipboardHelper.getCurrentClipboardData()
                 ?.let { data ->
                     when (data) {
                         is ClipboardData.Text -> {
