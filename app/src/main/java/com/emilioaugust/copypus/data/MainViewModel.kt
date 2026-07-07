@@ -3,9 +3,6 @@ package com.emilioaugust.copypus.data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.emilioaugust.copypus.utils.clipboardSuggestions
-import com.emilioaugust.copypus.utils.favoritesSuggestions
-import com.emilioaugust.copypus.utils.searchPlaceholderSuggestions
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -19,10 +16,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val favoriteItems = repository.getAllFavorites().stateIn(scope = viewModelScope,
         started = SharingStarted.WhileSubscribed((5000)), initialValue = emptyList())
-
-    val emptySuggestion = clipboardSuggestions.random()
-    val favoriteSuggestion = favoritesSuggestions.random()
-    val searchPlaceholderSuggestion = searchPlaceholderSuggestions.random()
 
     fun saveText(text: String) {
         if (text.isBlank()) return
@@ -47,7 +40,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (option == AutoDeleteOption.NEVER) {
             return
         }
-
         viewModelScope.launch {
             val currentTime = System.currentTimeMillis()
             val deleteBefore = currentTime - option.toMillis()
@@ -67,6 +59,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 id = item.id,
                 isFavorite = !item.isFavorite
             )
+        }
+    }
+
+    fun getLatestItem() {
+        viewModelScope.launch {
+            repository.getLatestItem()
         }
     }
 }
