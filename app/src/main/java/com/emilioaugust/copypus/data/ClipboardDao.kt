@@ -29,5 +29,11 @@ interface ClipboardDao {
     @Query("UPDATE clipboard_items SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavorite(id: Long, isFavorite: Boolean)
 
+    @Query("""
+    SELECT * FROM clipboard_items
+    ORDER BY timestamp DESC
+    LIMIT 1
+""")
+    suspend fun getLatestItem(): ClipboardItem?
 
 }
