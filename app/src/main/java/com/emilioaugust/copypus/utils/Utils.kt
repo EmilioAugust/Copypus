@@ -1,5 +1,8 @@
 package com.emilioaugust.copypus.utils
 
+import android.content.Context
+import com.emilioaugust.copypus.R
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -13,16 +16,19 @@ fun formatTime(timestamp: Long): String {
     return formatter.format(Date(timestamp))
 }
 
-fun formatSectionTitle(timestamp: Long): String {
+fun formatSectionTitle(timestamp: Long, context: Context): String {
     val now = Calendar.getInstance()
     val itemDate = Calendar.getInstance()
 
     itemDate.timeInMillis = timestamp
     return when {
-        isSameDay(now, itemDate) -> {"Today"}
-        isYesterday(now, itemDate) -> {"Yesterday"}
+        isSameDay(now, itemDate) -> { context.getString(R.string.today_section) }
+        isYesterday(now, itemDate) -> { context.getString(R.string.yesterday_section) }
         else -> {
-            SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(timestamp))
+            DateFormat.getDateInstance(
+                DateFormat.MEDIUM,
+                context.resources.configuration.locales[0]
+            ).format(Date(timestamp))
         }
     }
 }
