@@ -56,7 +56,7 @@ fun FavoritesScreen(viewModel: MainViewModel) {
         val textMatch = item.text.contains(searchQuery, ignoreCase = true)
         textMatch
     }
-    val groupedItems = filteredItems.groupBy { formatSectionTitle(it.timestamp) }
+    val groupedItems = filteredItems.groupBy { formatSectionTitle(it.timestamp, context) }
     val clipboardHelper = remember { ClipboardManagerHelper(context.applicationContext) }
 
     Scaffold(
@@ -78,7 +78,7 @@ fun FavoritesScreen(viewModel: MainViewModel) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.favoriteSuggestion,
+                    text = stringResource(R.string.empty_favorites),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.LightGray,
                     textAlign = TextAlign.Center
@@ -88,7 +88,8 @@ fun FavoritesScreen(viewModel: MainViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding(),
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
                         start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
                         end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
                         bottom = 0.dp
@@ -105,7 +106,7 @@ fun FavoritesScreen(viewModel: MainViewModel) {
                             horizontal = 16.dp,
                         ),
                     placeholder = {
-                        Text(viewModel.searchPlaceholderSuggestion)
+                        Text(stringResource(R.string.search_title))
                     },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.tertiary,
