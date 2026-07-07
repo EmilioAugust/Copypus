@@ -13,6 +13,9 @@ class ClipboardRepository(private val dao: ClipboardDao) {
     suspend fun updateFavorite(id: Long, isFavorite: Boolean) {
         dao.updateFavorite(id, isFavorite)
     }
+    suspend fun getLatestItem(): ClipboardItem? {
+        return dao.getLatestItem()
+    }
 
 
 }
