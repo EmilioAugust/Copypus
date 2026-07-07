@@ -3,6 +3,12 @@ package com.emilioaugust.copypus
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import com.emilioaugust.copypus.data.SettingsDataStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 sealed class ClipboardData {
@@ -13,9 +19,9 @@ sealed class ClipboardData {
 
 class ClipboardManagerHelper(val appContext: Context) {
     private val clipboardManager = appContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    private var lastText: String? = null
     private var listener: ClipboardManager.OnPrimaryClipChangedListener? = null
     private var ignoreNext = false
+    private val settingsDataStore = SettingsDataStore(appContext)
 
     fun getCurrentClipboardData(): ClipboardData? {
         return try {
@@ -39,20 +45,23 @@ class ClipboardManagerHelper(val appContext: Context) {
 
     fun startListening(onNewData: (ClipboardData) -> Unit) {
         listener = ClipboardManager.OnPrimaryClipChangedListener {
-            val clip = clipboardManager.primaryClip
-            val item = clip?.getItemAt(0)
-            if (item != null) {
-                val text = item
-                    .coerceToText(appContext)
-                    ?.toString()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val enabled = settingsDataStore.monitoringEnabledFlow.first()
+                    if (!enabled) return@launch
 
-                if (!text.isNullOrBlank()) {
-                    onNewData(
-                        ClipboardData.Text(text)
-                    )
+                    val clip = clipboardManager.primaryClip
+                    val item = clip?.getItemAt(0)
+
+                    if (item != null) {
+                        val text = item.coerceToText(appContext)?.toString()
+                        if (!text.isNullOrBlank()) {
+                            withContext(Dispatchers.Main) {
+                                onNewData(ClipboardData.Text(text))
+                            }
+                        }
+                    }
                 }
             }
-        }
         clipboardManager.addPrimaryClipChangedListener(listener)
     }
 
