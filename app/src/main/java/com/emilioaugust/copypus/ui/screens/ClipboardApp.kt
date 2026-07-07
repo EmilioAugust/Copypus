@@ -1,5 +1,6 @@
 package com.emilioaugust.copypus.ui.screens
 
+import android.text.Layout
 import com.emilioaugust.copypus.R
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -31,11 +32,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Search
@@ -84,7 +88,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
         textMatch
     }
     val clipboardHelper = remember { ClipboardManagerHelper(context.applicationContext) }
-    val groupedItems = filteredItems.groupBy { formatSectionTitle(it.timestamp) }
+    val groupedItems = filteredItems.groupBy { formatSectionTitle(it.timestamp, context) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -135,7 +139,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.emptySuggestion,
+                    text = stringResource(R.string.empty_history),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.LightGray,
                     textAlign = TextAlign.Center
@@ -145,11 +149,12 @@ fun ClipboardApp(viewModel: MainViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding(),
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
                         start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
                         end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
                         bottom = 0.dp
-                        )
+                    )
             ) {
                 OutlinedTextField(
                     value = searchQuery,
@@ -162,7 +167,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
                             horizontal = 16.dp
                         ),
                     placeholder = {
-                        Text(viewModel.searchPlaceholderSuggestion)
+                        Text(stringResource(R.string.search_title))
                     },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.tertiary,
@@ -303,7 +308,8 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
             }
 
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .clip(MaterialTheme.shapes.medium)
                     .background(color)
                     .padding(horizontal = 20.dp),
@@ -320,7 +326,11 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(width = 0.8.dp, color = MaterialTheme.colorScheme.outline, shape = MaterialTheme.shapes.medium)
+                .border(
+                    width = 0.8.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = MaterialTheme.shapes.medium
+                )
                 .clip(MaterialTheme.shapes.medium),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(
@@ -332,7 +342,6 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(modifier = Modifier
                     .clip(MaterialTheme.shapes.small)
@@ -350,7 +359,9 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                         },
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onTertiary,
-                        modifier = Modifier.padding(16.dp).size(24.dp)
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(24.dp)
                     )
                 }
 
@@ -359,50 +370,57 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                 )
 
                 Column(modifier = Modifier
-                    .weight(1f).padding(start = 8.dp)
-                    .clickable { expanded = !expanded }
+                    .weight(1f)
+                    .padding(start = 8.dp)
                     .animateContentSize(
                         animationSpec = spring(
                             dampingRatio = Spring.DampingRatioNoBouncy,
                             stiffness = Spring.StiffnessMedium
                         )
                     )) {
-                    Text(
-                        text = item.text,
-                        maxLines =
-                            if (expanded)
-                                Int.MAX_VALUE
-                            else
-                                2,
+                    SelectionContainer() {
+                        Text(
+                            text = item.text,
+                            maxLines =
+                                if (expanded)
+                                    Int.MAX_VALUE
+                                else
+                                    2,
 
-                        overflow =
-                            if (expanded)
-                                TextOverflow.Visible
-                            else
-                                TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                            overflow =
+                                if (expanded)
+                                    TextOverflow.Visible
+                                else
+                                    TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
 
-                    Spacer(
-                        modifier = Modifier.height(4.dp)
-                    )
+                    Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
                         text = formatTime(item.timestamp),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = Color.Gray,
                     )
-
-
                 }
 
-                IconButton(
-                    onClick = onCopy
-                ) {
+                IconButton(onClick = onCopy) {
                     Icon(
                         Icons.Default.ContentCopy,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector =
+                            if (expanded)
+                                Icons.Default.ExpandLess
+                            else
+                                Icons.Default.ExpandMore,
+                        contentDescription = null
                     )
                 }
             }
@@ -424,7 +442,7 @@ fun ClipboardTopBarMenu(onClearAll: () -> Unit) {
             shadowElevation = 8.dp,
             tonalElevation = 8.dp) {
             DropdownMenuItem(
-                text = { Text("Clear all") },
+                text = { Text(stringResource(R.string.clear_all_btn)) },
                 onClick = {
                     onClearAll()
                     expanded = false
