@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.emilioaugust.copypus"
-    compileSdk = 36  // Обновлено до 36
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.emilioaugust.copypus"
@@ -62,6 +62,7 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+    implementation(libs.androidx.appcompat)
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
