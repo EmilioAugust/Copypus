@@ -13,6 +13,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Clipboard">
 
+        <service
+            android:name=".data.tiles.PauseMonitoringTileService"
+            android:label="Pause Monitoring"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true"
+            android:icon="@drawable/copypus_qstile">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".data.tiles.LastCopiedTileService"
+            android:label="Last Copied"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true"
+            android:icon="@drawable/copypus_qstile">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
