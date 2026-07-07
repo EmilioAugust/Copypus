@@ -10,6 +10,19 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(private val dataStore: SettingsDataStore) : ViewModel() {
     val themeMode = dataStore.themeMode
+    val autoDelete = dataStore.autoDelete.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = AutoDeleteOption.NEVER
+    )
+    val language =
+        dataStore.language
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                AppLanguage.SYSTEM
+            )
+    val pauseDuration = dataStore.pauseDurationFlow
 
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {
@@ -17,17 +30,23 @@ class SettingsViewModel(private val dataStore: SettingsDataStore) : ViewModel() 
         }
     }
 
-    val autoDelete = dataStore.autoDelete.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = AutoDeleteOption.NEVER
-    )
-
     fun setAutoDelete(option: AutoDeleteOption) {
         viewModelScope.launch {
             dataStore.setAutoDelete(option)
         }
     }
+
+    suspend fun setLanguage(language: AppLanguage) {
+        dataStore.setAppLanguage(language)
+    }
+
+    fun setPauseDuration(duration: PauseDuration) {
+        viewModelScope.launch {
+            dataStore.setPauseDuration(duration)
+        }
+    }
+
+
 }
 
 class SettingsViewModelFactory(private val dataStore: SettingsDataStore) : ViewModelProvider.Factory {
