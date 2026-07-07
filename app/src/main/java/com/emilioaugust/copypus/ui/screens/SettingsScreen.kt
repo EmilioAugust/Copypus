@@ -1,10 +1,12 @@
 package com.emilioaugust.copypus.ui.screens
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -22,6 +25,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,25 +40,33 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.emilioaugust.copypus.R
 import com.emilioaugust.copypus.data.AutoDeleteOption
+import com.emilioaugust.copypus.data.AppLanguage
+import com.emilioaugust.copypus.data.PauseDuration
 import com.emilioaugust.copypus.data.SettingsViewModel
 import com.emilioaugust.copypus.ui.theme.ThemeMode
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel) {
     val themeMode by viewModel.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
     val autoDelete by viewModel.autoDelete.collectAsState(initial = AutoDeleteOption.NEVER)
-    var expanded by remember { mutableStateOf(false) }
+    val language by viewModel.language.collectAsState(initial = AppLanguage.SYSTEM)
+    val pauseDuration by viewModel.pauseDuration.collectAsState(initial = PauseDuration.MIN_15)
 
+    val scope = rememberCoroutineScope()
+    val activity = LocalContext.current as Activity
 
     Scaffold(
         topBar = {
@@ -95,89 +107,157 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                         ) {
                             Text(
                                 text = when (mode) {
-                                    ThemeMode.SYSTEM -> "System"
-                                    ThemeMode.LIGHT -> "Light"
-                                    ThemeMode.DARK -> "Dark"
+                                    ThemeMode.SYSTEM -> stringResource(R.string.system_theme)
+                                    ThemeMode.LIGHT -> stringResource(R.string.light_theme)
+                                    ThemeMode.DARK -> stringResource(R.string.dark_theme)
                                 }
                             )
                         }
                     }
                 }
 
-                // AUTO DELETE
+                // AUTO DELETE and PAUSE DURATION
                 Spacer(modifier = Modifier.height(28.dp))
                 Text(text = stringResource(R.string.title_preferences_settings), style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 0.8.dp,
-                            color = MaterialTheme.colorScheme.outline,
-                            shape = MaterialTheme.shapes.medium
+
+                SettingsCard {
+                    SettingsItem(
+                        title = stringResource(R.string.auto_delete_title),
+                        description = stringResource(R.string.auto_delete_text)
+                    ) {
+                        SettingsDropdown(
+                            selected = autoDelete,
+                            options = AutoDeleteOption.entries,
+                            label = { stringResource(it.titleRes) },
+                            onSelected = viewModel::setAutoDelete
                         )
-                        .clip(MaterialTheme.shapes.medium),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
-                ) {
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp, horizontal = 16.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(text = "Auto delete", style = MaterialTheme.typography.titleMedium)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(text = "Automatically remove clipboard items", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-                            }
-                            Box {
-                                TextButton(
-                                    onClick = { expanded = true },
-                                    shape = MaterialTheme.shapes.small,
-                                    border = BorderStroke(
-                                        0.8.dp,
-                                        MaterialTheme.colorScheme.outline
-                                    ),
-                                    colors = ButtonDefaults.textButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                    )
-                                ) {
-                                    Text(
-                                        autoDelete.title
-                                    )
-                                    Icon(
-                                        Icons.Default.KeyboardArrowDown,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        modifier = Modifier.padding(start = 4.dp)
-                                    )
-                                }
-                                DropdownMenu(
-                                    expanded = expanded,
-                                    onDismissRequest = { expanded = false },
-                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                ) {
-                                    AutoDeleteOption.entries.forEach { option ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(option.title)
-                                            },
-                                            onClick = {
-                                                viewModel
-                                                    .setAutoDelete(option)
-                                                expanded = false
-                                            }
-                                        )
-                                    }
+                    }
+
+                    HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+
+                    SettingsItem(
+                        title = stringResource(R.string.pause_monitoring_title),
+                        description = stringResource(R.string.choose_pause_duration_text)
+                    ) {
+                        SettingsDropdown(
+                            selected = pauseDuration,
+                            options = PauseDuration.entries,
+                            label = { stringResource(it.titleRes) },
+                            onSelected = viewModel::setPauseDuration
+                        )
+                    }
+
+                }
+
+                // LANGUAGE
+                Spacer(modifier = Modifier.height(28.dp))
+                Text(text = stringResource(R.string.title_language_settings), style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+
+                SettingsCard {
+                    SettingsItem(
+                        title = stringResource(R.string.language_title),
+                        description = stringResource(R.string.language_text)
+                    ) {
+                        SettingsDropdown(
+                            selected = language,
+                            options = AppLanguage.entries,
+                            label = { stringResource(it.titleRes) },
+                            onSelected = { lang ->
+                                scope.launch {
+                                    viewModel.setLanguage(lang)
+                                    activity.recreate()
                                 }
                             }
-                        }
+                        )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsCard(content: @Composable ColumnScope.() -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 0.8.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = MaterialTheme.shapes.medium
+            )
+            .clip(MaterialTheme.shapes.medium),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+    ) {
+        Column {
+            content()
+        }
+    }
+}
+
+@Composable
+fun SettingsItem(title: String, description: String, control: @Composable () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 16.dp, horizontal = 16.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = description, style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray, modifier = Modifier.width(230.dp))
+            }
+            control()
+        }
+    }
+}
+
+@Composable
+fun <T> SettingsDropdown(selected: T, options: List<T>, label: @Composable (T) -> String, onSelected: (T) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        TextButton(
+            onClick = { expanded = true },
+            shape = MaterialTheme.shapes.small,
+            border = BorderStroke(
+                0.8.dp,
+                MaterialTheme.colorScheme.outline
+            ),
+            colors = ButtonDefaults.textButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        ) {
+            Text(label(selected))
+            Icon(
+                Icons.Default.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(label(option)) },
+                    onClick = {
+                        onSelected(option)
+                        expanded = false
+                    }
+                )
             }
         }
     }
