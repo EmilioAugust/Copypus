@@ -341,11 +341,13 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.secondaryContainer)) {
+                Box(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                ) {
                     Icon(
                         imageVector = when (type) {
                             ClipboardType.LINK ->
@@ -355,8 +357,7 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                                 Icons.Default.Code
 
                             ClipboardType.TEXT ->
-                                Icons.Default.TextFields
-                        },
+                                Icons.Default.TextFields },
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier
@@ -377,7 +378,9 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                             dampingRatio = Spring.DampingRatioNoBouncy,
                             stiffness = Spring.StiffnessMedium
                         )
-                    )) {
+                    ),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
                     SelectionContainer() {
                         Text(
                             text = item.text,
@@ -392,7 +395,7 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                                     TextOverflow.Visible
                                 else
                                     TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
 
