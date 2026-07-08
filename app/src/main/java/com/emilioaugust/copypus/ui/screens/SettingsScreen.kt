@@ -62,7 +62,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(viewModel: SettingsViewModel) {
     val themeMode by viewModel.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
     val autoDelete by viewModel.autoDelete.collectAsState(initial = AutoDeleteOption.NEVER)
-    val language by viewModel.language.collectAsState(initial = AppLanguage.SYSTEM)
+    val language by viewModel.language.collectAsState(initial = AppLanguage.ENGLISH)
     val pauseDuration by viewModel.pauseDuration.collectAsState(initial = PauseDuration.MIN_15)
 
     val scope = rememberCoroutineScope()
@@ -93,7 +93,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                 Text(text = stringResource(R.string.title_appearance_settings), style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray)
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                     ThemeMode.entries.forEachIndexed { index, mode ->
                         SegmentedButton(

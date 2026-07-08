@@ -39,11 +39,13 @@ class SettingsDataStore(private val context: Context) {
         )
     }
 
-    val language: Flow<AppLanguage> = context.dataStore.data.map { speech ->
-        AppLanguage.valueOf(
-            speech[APP_LANGUAGE_KEY] ?: AppLanguage.ENGLISH.name
-        )
-    }
+    val language: Flow<AppLanguage> =
+        context.dataStore.data.map { preferences ->
+            val value = preferences[APP_LANGUAGE_KEY] ?: AppLanguage.ENGLISH.name
+
+            AppLanguage.entries.firstOrNull { it.name == value }
+                ?: AppLanguage.ENGLISH
+        }
 
     val monitoringEnabledFlow: Flow<Boolean> = context.dataStore.data.map {
             it[monitoringEnabledKey] ?: true
@@ -78,11 +80,12 @@ class SettingsDataStore(private val context: Context) {
     }
 
     suspend fun getAppLanguage(): AppLanguage {
-        val prefs = context.dataStore.data.first()
+        val value = context.dataStore.data
+            .map { it[APP_LANGUAGE_KEY] ?: AppLanguage.ENGLISH.name }
+            .first()
 
-        val saved = prefs[APP_LANGUAGE_KEY] ?: AppLanguage.SYSTEM.name
-
-        return AppLanguage.valueOf(saved)
+        return AppLanguage.entries.firstOrNull { it.name == value }
+            ?: AppLanguage.ENGLISH
     }
 
     suspend fun setMonitoringEnabled(enabled: Boolean) {

@@ -65,14 +65,7 @@ class MainActivity : ComponentActivity() {
             val language by settingsViewModel.language.collectAsState()
 
             LaunchedEffect(language) {
-
-                val locales =
-                    if (language == AppLanguage.SYSTEM) {
-                        LocaleListCompat.getEmptyLocaleList()
-                    } else {
-                        LocaleListCompat.forLanguageTags(language.code)
-                    }
-
+                val locales = LocaleListCompat.forLanguageTags(language.code)
                 AppCompatDelegate.setApplicationLocales(locales)
             }
 

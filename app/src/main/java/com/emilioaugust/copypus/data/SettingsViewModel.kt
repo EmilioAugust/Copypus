@@ -20,7 +20,7 @@ class SettingsViewModel(private val dataStore: SettingsDataStore) : ViewModel() 
             .stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5000),
-                AppLanguage.SYSTEM
+                AppLanguage.ENGLISH
             )
     val pauseDuration = dataStore.pauseDurationFlow
 
