@@ -22,12 +22,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +48,7 @@ import com.emilioaugust.copypus.R
 import com.emilioaugust.copypus.ClipboardManagerHelper
 import com.emilioaugust.copypus.data.MainViewModel
 import com.emilioaugust.copypus.utils.formatSectionTitle
+import kotlinx.coroutines.launch
 import kotlin.collections.component1
 import kotlin.collections.component2
 
@@ -50,6 +56,9 @@ import kotlin.collections.component2
 @Composable
 fun FavoritesScreen(viewModel: MainViewModel) {
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     val favoriteItems by viewModel.favoriteItems.collectAsState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val filteredItems = favoriteItems.filter { item ->
@@ -60,6 +69,9 @@ fun FavoritesScreen(viewModel: MainViewModel) {
     val clipboardHelper = remember { ClipboardManagerHelper(context.applicationContext) }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState, modifier = Modifier.padding(0.dp)) {
+                data -> CustomSnackBar(data)
+        }},
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.topbar_favorites),
@@ -159,12 +171,32 @@ fun FavoritesScreen(viewModel: MainViewModel) {
                                     )
                                     Toast.makeText(
                                         context,
-                                        "Text copied!",
+                                        context.getString(R.string.text_copied_text),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 },
-                                onFavorite = { viewModel.toggleFavorite(item) },
-                                onDelete = { viewModel.deleteItem(item) }
+                                onFavorite = {
+                                    viewModel.toggleFavorite(item)
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.deleted_from_favorites_text),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                             },
+                                onDelete = {
+                                    viewModel.deleteItem(item)
+                                    scope.launch {
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = context.getString(R.string.clipboard_deleted_text),
+                                            actionLabel = context.getString(R.string.undo_text),
+                                            duration = SnackbarDuration.Short
+                                        )
+
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            viewModel.restoreItem(item)
+                                        }
+                                    }
+                                }
                             )
                         }
                     }

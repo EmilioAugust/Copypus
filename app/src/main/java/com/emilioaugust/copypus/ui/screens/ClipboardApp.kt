@@ -120,7 +120,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
                         viewModel.clearAll()
                         Toast.makeText(
                             context,
-                            "It's empty",
+                            context.getString(R.string.it_s_empty_text),
                             Toast.LENGTH_SHORT
                         ).show()
                     })
@@ -225,7 +225,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
                                         )
                                         Toast.makeText(
                                             context,
-                                            "Text copied",
+                                            context.getString(R.string.text_copied_text),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     },
@@ -233,7 +233,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
                                         viewModel.toggleFavorite(item)
                                         Toast.makeText(
                                             context,
-                                            "Added to favorites",
+                                            context.getString(R.string.added_to_favorites_text),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                                  },
@@ -241,8 +241,8 @@ fun ClipboardApp(viewModel: MainViewModel) {
                                         viewModel.deleteItem(item)
                                         scope.launch {
                                             val result = snackbarHostState.showSnackbar(
-                                                message = "Clipboard deleted",
-                                                actionLabel = "Undo",
+                                                message = context.getString(R.string.clipboard_deleted_text),
+                                                actionLabel = context.getString(R.string.undo_text),
                                                 duration = SnackbarDuration.Short
                                             )
 
@@ -395,7 +395,7 @@ fun ClipboardItemCard(item: ClipboardItem, onCopy: () -> Unit, onFavorite: () ->
                                     TextOverflow.Visible
                                 else
                                     TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                     }
 
@@ -482,7 +482,7 @@ fun CustomSnackBar(data: SnackbarData) {
             Spacer(modifier = Modifier.width(12.dp))
             Text(text = data.visuals.message, modifier = Modifier.weight(1f))
             TextButton(onClick = { data.performAction() }) {
-                Text("Undo")
+                Text(stringResource(R.string.undo_text))
             }
         }
     }
