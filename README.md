@@ -90,6 +90,18 @@
     * Clipboard History
     * Favorites
     * Settings
+      
+- **Languages**
+  - Russian and Spanish translations.
+    
+- **Copy selectively**
+  - You can copy specific selections instead of the entire text.
+    
+- **Pause Monitoring**
+  - Ability to pause monitoring directly from the Quick Tile.
+    
+- **Quick Tile Enhancement**
+  - "Copy Last Text" option to the Quick Tile for faster access.
 
 <hr />
 
