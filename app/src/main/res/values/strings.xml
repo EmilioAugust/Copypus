@@ -36,4 +36,20 @@
     <string name="russian_lng">Russian</string>
     <string name="spanish_lng">Spanish</string>
     <string name="clear_all_btn">Clear all</string>
+    <string name="pause_monitoring_tile_name">Pause monitoring</string>
+    <string name="last_copied_tile_name">Last copied</string>
+    <string name="clear_history_tile_name">Clear history</string>
+    <string name="no_items_qs_tile_subtitle">No items</string>
+    <string name="copied_text">Copied</string>
+    <string name="paused_subtitle_tile">Paused</string>
+    <string name="monitoring_on_subtitle_tile">Monitoring ON</string>
+    <string name="clear_history_label">Clear history</string>
+    <string name="delete_all_copied_subtitle_tile">Delete all copied items</string>
+    <string name="history_cleared_text">History cleared</string>
+    <string name="it_s_empty_text">It\'s empty</string>
+    <string name="text_copied_text">Text copied</string>
+    <string name="added_to_favorites_text">Added to favorites</string>
+    <string name="deleted_from_favorites_text">Deleted from favorites</string>
+    <string name="clipboard_deleted_text">Clipboard deleted</string>
+    <string name="undo_text">Undo</string>
 </resources>
