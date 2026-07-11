@@ -9,9 +9,11 @@ import android.service.quicksettings.TileService
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.emilioaugust.copypus.ClipboardData
+import com.emilioaugust.copypus.R
 import com.emilioaugust.copypus.data.AppDatabase
 import com.emilioaugust.copypus.data.ClipboardRepository
 import com.emilioaugust.copypus.data.SettingsDataStore
+import com.emilioaugust.copypus.utils.LocaleHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LastCopiedTileService : TileService() {
+    private val settingsDataStore by lazy { SettingsDataStore(applicationContext) }
     private lateinit var repository: ClipboardRepository
 
     override fun onCreate() {
@@ -42,16 +45,18 @@ class LastCopiedTileService : TileService() {
     override fun onClick() {
         super.onClick()
         CoroutineScope(Dispatchers.IO).launch {
+            val language = settingsDataStore.language.first()
+            val context = LocaleHelper.setLocale(applicationContext, language.code)
             val item = repository.getLatestItem()
             if (item != null) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("Copied", item.text)
+                val clip = ClipData.newPlainText(getString(R.string.copied_text), item.text)
                 clipboard.setPrimaryClip(clip)
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         applicationContext,
-                        "Copied",
+                        context.getString(R.string.copied_text),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -61,16 +66,20 @@ class LastCopiedTileService : TileService() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun updateTile(text: String?) {
-        qsTile?.apply {
-            label = "Last Copied"
-            subtitle =
-                if (text.isNullOrBlank()) {
-                    "No items"
-                } else {
-                    text.take(20)
-                }
-            state = Tile.STATE_ACTIVE
-            updateTile()
+        CoroutineScope(Dispatchers.IO).launch {
+            val language = settingsDataStore.language.first()
+            val context = LocaleHelper.setLocale(applicationContext, language.code)
+            qsTile?.apply {
+                label = context.getString(R.string.last_copied_tile_name)
+                subtitle =
+                    if (text.isNullOrBlank()) {
+                        context.getString(R.string.no_items_qs_tile_subtitle)
+                    } else {
+                        text.take(20)
+                    }
+                state = Tile.STATE_ACTIVE
+                updateTile()
+            }
         }
     }
 }

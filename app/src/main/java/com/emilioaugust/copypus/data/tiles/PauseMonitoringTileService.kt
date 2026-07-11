@@ -4,7 +4,9 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
+import com.emilioaugust.copypus.R
 import com.emilioaugust.copypus.data.SettingsDataStore
+import com.emilioaugust.copypus.utils.LocaleHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -12,6 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PauseMonitoringTileService : TileService() {
+    private val settingsDataStore by lazy { SettingsDataStore(applicationContext) }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartListening() {
         super.onStartListening()
@@ -50,23 +54,26 @@ class PauseMonitoringTileService : TileService() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun updateTile(paused: Boolean) {
-        qsTile?.apply {
-            label = "Pause monitoring"
-            subtitle =
-                if (paused) {
-                    "Paused"
-                } else {
-                    "Monitoring ON"
-                }
+        CoroutineScope(Dispatchers.IO).launch {
+            val language = settingsDataStore.language.first()
+            val context = LocaleHelper.setLocale(applicationContext, language.code)
+            qsTile?.apply {
+                label = context.getString(R.string.pause_monitoring_tile_name)
+                subtitle =
+                    if (paused) {
+                        context.getString(R.string.paused_subtitle_tile)
+                    } else {
+                        context.getString(R.string.monitoring_on_subtitle_tile)
+                    }
 
-            state =
-                if (paused) {
-                    Tile.STATE_ACTIVE
-                } else {
-                    Tile.STATE_INACTIVE
-                }
-
-            updateTile()
+                state =
+                    if (paused) {
+                        Tile.STATE_ACTIVE
+                    } else {
+                        Tile.STATE_INACTIVE
+                    }
+                updateTile()
+            }
         }
     }
 }
