@@ -61,10 +61,4 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
     }
-
-    fun getLatestItem() {
-        viewModelScope.launch {
-            repository.getLatestItem()
-        }
-    }
 }
