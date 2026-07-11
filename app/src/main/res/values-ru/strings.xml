@@ -36,4 +36,20 @@
     <string name="russian_lng">Русский</string>
     <string name="spanish_lng">Испанский</string>
     <string name="clear_all_btn">Очистить всё</string>
+    <string name="pause_monitoring_tile_name">Приостановить мониторинг</string>
+    <string name="last_copied_tile_name">Последнее скопированное</string>
+    <string name="clear_history_tile_name">Очистить историю</string>
+    <string name="no_items_qs_tile_subtitle">Нет элементов</string>
+    <string name="copied_text">Скопировано</string>
+    <string name="paused_subtitle_tile">Приостановлено</string>
+    <string name="monitoring_on_subtitle_tile">Мониторинг включён</string>
+    <string name="clear_history_label">Очистить историю</string>
+    <string name="delete_all_copied_subtitle_tile">Удалить все скопированные элементы</string>
+    <string name="history_cleared_text">История очищена</string>
+    <string name="it_s_empty_text">Здесь пусто</string>
+    <string name="text_copied_text">Текст скопирован</string>
+    <string name="added_to_favorites_text">Добавлено в избранное</string>
+    <string name="deleted_from_favorites_text">Удалено из избранного</string>
+    <string name="clipboard_deleted_text">Буфер обмена очищен</string>
+    <string name="undo_text">Отменить</string>
 </resources>

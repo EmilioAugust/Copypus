@@ -36,4 +36,20 @@
     <string name="russian_lng">Ruso</string>
     <string name="spanish_lng">Español</string>
     <string name="clear_all_btn">Eliminar todos</string>
+    <string name="pause_monitoring_tile_name">Pausar monitoreo</string>
+    <string name="last_copied_tile_name">Último copiado</string>
+    <string name="clear_history_tile_name">Borrar historial</string>
+    <string name="no_items_qs_tile_subtitle">Sin elementos</string>
+    <string name="copied_text">Copiado</string>
+    <string name="paused_subtitle_tile">Pausado</string>
+    <string name="monitoring_on_subtitle_tile">Monitoreo activado</string>
+    <string name="clear_history_label">Borrar historial</string>
+    <string name="delete_all_copied_subtitle_tile">Eliminar todos los elementos copiados</string>
+    <string name="history_cleared_text">Historial borrado</string>
+    <string name="it_s_empty_text">Está vacío</string>
+    <string name="text_copied_text">Texto copiado</string>
+    <string name="added_to_favorites_text">Añadido a favoritos</string>
+    <string name="deleted_from_favorites_text">Eliminado de favoritos</string>
+    <string name="clipboard_deleted_text">Portapapeles borrado</string>
+    <string name="undo_text">Deshacer</string>
 </resources>
