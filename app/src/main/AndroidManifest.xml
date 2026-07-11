@@ -15,10 +15,10 @@
 
         <service
             android:name=".data.tiles.PauseMonitoringTileService"
-            android:label="Pause Monitoring"
+            android:label="@string/pause_monitoring_tile_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true"
-            android:icon="@drawable/copypus_qstile">
+            android:icon="@drawable/pm_tile">
 
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -27,10 +27,22 @@
 
         <service
             android:name=".data.tiles.LastCopiedTileService"
-            android:label="Last Copied"
+            android:label="@string/last_copied_tile_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true"
-            android:icon="@drawable/copypus_qstile">
+            android:icon="@drawable/last_copied_tile">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".data.tiles.ClearHistoryTileService"
+            android:label="@string/clear_history_tile_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true"
+            android:icon="@drawable/clear_history_tile">
 
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -52,7 +64,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Clipboard">
+            android:theme="@style/Theme.Clipboard.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
