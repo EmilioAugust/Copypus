@@ -1,6 +1,5 @@
 package com.emilioaugust.copypus.ui.screens
 
-import android.text.Layout
 import com.emilioaugust.copypus.R
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -14,7 +13,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,10 +32,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Link
@@ -70,6 +71,8 @@ import com.emilioaugust.copypus.ClipboardData
 import com.emilioaugust.copypus.data.MainViewModel
 import com.emilioaugust.copypus.data.ClipboardItem
 import com.emilioaugust.copypus.ClipboardManagerHelper
+import com.emilioaugust.copypus.ui.ManualEntrySheet
+import com.emilioaugust.copypus.ui.MultiPasteSheet
 import com.emilioaugust.copypus.utils.ClipboardType
 import com.emilioaugust.copypus.utils.detectClipboardType
 import com.emilioaugust.copypus.utils.formatSectionTitle
@@ -91,6 +94,7 @@ fun ClipboardApp(viewModel: MainViewModel) {
     val groupedItems = filteredItems.groupBy { formatSectionTitle(it.timestamp, context) }
 
     val snackbarHostState = remember { SnackbarHostState() }
+    var currentSheet by remember { mutableStateOf(AddSheet.NONE) }
     val scope = rememberCoroutineScope()
 
     DisposableEffect(Unit) {
@@ -124,6 +128,12 @@ fun ClipboardApp(viewModel: MainViewModel) {
                             Toast.LENGTH_SHORT
                         ).show()
                     })
+                },
+                navigationIcon = {
+                    ClipboardAddMenu(
+                        onManualEntry = { currentSheet = AddSheet.MANUAL },
+                        onMultiPaste = { currentSheet = AddSheet.MULTI }
+                    )
                 },
                 windowInsets = WindowInsets(0, 0, 0, 0)
             )
@@ -258,6 +268,47 @@ fun ClipboardApp(viewModel: MainViewModel) {
                 }
             }
         }
+    }
+
+    when(currentSheet) {
+        AddSheet.MANUAL -> {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    currentSheet = AddSheet.NONE
+                },
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ) {
+                ManualEntrySheet(
+                    onDismiss = { currentSheet = AddSheet.NONE },
+                    onSave = { text ->
+                        viewModel.saveText(text)
+                        currentSheet = AddSheet.NONE
+                    }
+                )
+            }
+        }
+
+        AddSheet.MULTI -> {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    currentSheet = AddSheet.NONE
+                },
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ) {
+                MultiPasteSheet(
+                    onDismiss = { currentSheet = AddSheet.NONE },
+                    onSaveAll = { texts ->
+                        texts.forEach {
+                            viewModel.saveText(it)
+                        }
+                    }
+                )
+            }
+        }
+
+        AddSheet.NONE -> Unit
     }
 }
 
@@ -458,6 +509,50 @@ fun ClipboardTopBarMenu(onClearAll: () -> Unit) {
                     )
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun ClipboardAddMenu(onManualEntry: () -> Unit, onMultiPaste: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        IconButton(onClick = { expanded = true }) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = null
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            shape = MaterialTheme.shapes.small,
+            shadowElevation = 8.dp,
+            tonalElevation = 8.dp
+        ) {
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.manual_entry_title)) },
+                leadingIcon = { Icon(Icons.Default.Edit, null,
+                    tint = MaterialTheme.colorScheme.onTertiary) },
+                onClick = {
+                    expanded = false
+                    onManualEntry()
+                }
+            )
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.multi_paste_title)) },
+                leadingIcon = { Icon(Icons.Default.ContentPaste, null,
+                    tint = MaterialTheme.colorScheme.onTertiary) },
+                onClick = {
+                    expanded = false
+                    onMultiPaste()
+                }
+            )
+
         }
     }
 }

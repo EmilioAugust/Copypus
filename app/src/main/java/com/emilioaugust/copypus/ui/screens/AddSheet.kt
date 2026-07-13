@@ -1,4 +1,7 @@
 package com.emilioaugust.copypus.ui.screens
 
-class AddSheet {
+enum class AddSheet {
+    NONE,
+    MANUAL,
+    MULTI
 }
