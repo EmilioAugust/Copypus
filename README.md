@@ -97,7 +97,7 @@
     
 - **About Section**
   - All app info in one place
-  - 
+  
 - **Share from Other Apps**
   - Long-press any text in any app, tap Share, and send it to our app to save instantly
     
