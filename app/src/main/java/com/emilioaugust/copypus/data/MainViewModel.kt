@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = ClipboardRepository(AppDatabase.getInstance(application).clipboardDao())
     private var lastSavedText: String? = null
-
     val items = repository.getAllItems().stateIn(scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000), initialValue = emptyList())
 
