@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        handleShareIntent(intent)
         enableEdgeToEdge()
         clipboardHelper = ClipboardManagerHelper(this)
         settingsDataStore = SettingsDataStore(applicationContext)
@@ -104,6 +105,23 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleShareIntent(intent)
+    }
+
+    private fun handleShareIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND) {
+            val sharedText =
+                intent.getStringExtra(
+                    Intent.EXTRA_TEXT
+                )
+            if (!sharedText.isNullOrBlank()) {
+                viewModel.saveText(sharedText)
+            }
         }
     }
 }
