@@ -6,6 +6,7 @@
     <string name="title_appearance_settings">ТЕМА</string>
     <string name="title_preferences_settings">ПРЕДПОЧТЕНИЯ</string>
     <string name="title_language_settings">ЯЗЫК</string>
+    <string name="title_about_settings">О ПРИЛОЖЕНИИ</string>
     <string name="history_nav">История</string>
     <string name="favorites_nav">Избранное</string>
     <string name="settings_nav">Настройки</string>
@@ -52,4 +53,15 @@
     <string name="deleted_from_favorites_text">Удалено из избранного</string>
     <string name="clipboard_deleted_text">Буфер обмена очищен</string>
     <string name="undo_text">Отменить</string>
+    <string name="saved_to_copypus">Сохранено в Copypus</string>
+    <string name="multi_paste_title">Мультивставка</string>
+    <string name="paste_text_here_placeholder">Вставьте текст сюда</string>
+    <string name="add_btn">Добавить</string>
+    <string name="added_items">Добавлено: %1$d</string>
+    <string name="save_all_btn">Сохранить все</string>
+    <string name="manual_entry_title">Ручной ввод</string>
+    <string name="save_btn">Сохранить</string>
+    <string name="app_version_title">Версия приложения</string>
+    <string name="app_feedback_support_title"><![CDATA[Обратная связь и поддержка]]></string>
+    <string name="view_source_code_title">Просмотреть исходный код</string>
 </resources>

@@ -6,6 +6,7 @@
     <string name="title_appearance_settings">TEMA</string>
     <string name="title_preferences_settings">PREFERENCIAS</string>
     <string name="title_language_settings">LENGUAJE</string>
+    <string name="title_about_settings">ACERCA DE</string>
     <string name="history_nav">Historia</string>
     <string name="favorites_nav">Favoritos</string>
     <string name="settings_nav">Configuración</string>
@@ -52,4 +53,15 @@
     <string name="deleted_from_favorites_text">Eliminado de favoritos</string>
     <string name="clipboard_deleted_text">Portapapeles borrado</string>
     <string name="undo_text">Deshacer</string>
+    <string name="saved_to_copypus">Guardado en Copypus</string>
+    <string name="multi_paste_title">Multipegar</string>
+    <string name="paste_text_here_placeholder">Pega el texto aquí</string>
+    <string name="add_btn">Añadir</string>
+    <string name="added_items">Añadidos: %1$d</string>
+    <string name="save_all_btn">Guardar todo</string>
+    <string name="manual_entry_title">Entrada manual</string>
+    <string name="save_btn">Guardar</string>
+    <string name="app_version_title">Versión de la aplicación</string>
+    <string name="app_feedback_support_title"><![CDATA[Comentarios y soporte]]></string>
+    <string name="view_source_code_title">Ver código fuente</string>
 </resources>

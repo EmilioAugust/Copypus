@@ -6,6 +6,7 @@
     <string name="title_appearance_settings">THEME</string>
     <string name="title_preferences_settings">PREFERENCES</string>
     <string name="title_language_settings">LANGUAGE</string>
+    <string name="title_about_settings">ABOUT</string>
     <string name="history_nav">History</string>
     <string name="favorites_nav">Favorites</string>
     <string name="settings_nav">Settings</string>
@@ -52,4 +53,15 @@
     <string name="deleted_from_favorites_text">Deleted from favorites</string>
     <string name="clipboard_deleted_text">Clipboard deleted</string>
     <string name="undo_text">Undo</string>
+    <string name="saved_to_copypus">Saved to Copypus</string>
+    <string name="multi_paste_title">Multi Paste</string>
+    <string name="paste_text_here_placeholder">Paste text here</string>
+    <string name="add_btn">Add</string>
+    <string name="added_items">Added: %1$d</string>
+    <string name="save_all_btn">Save All</string>
+    <string name="manual_entry_title">Manual Entry</string>
+    <string name="save_btn">Save</string>
+    <string name="app_version_title">App Version</string>
+    <string name="app_feedback_support_title"><![CDATA[App Feedback & Support]]></string>
+    <string name="view_source_code_title">View Source Code</string>
 </resources>
