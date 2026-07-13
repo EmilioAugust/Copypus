@@ -1,8 +1,11 @@
 package com.emilioaugust.copypus.ui.screens
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +20,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Copyright
+import androidx.compose.material.icons.filled.Feedback
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,6 +50,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,6 +58,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.os.BuildCompat
+import com.emilioaugust.copypus.BuildConfig
 import com.emilioaugust.copypus.R
 import com.emilioaugust.copypus.data.AutoDeleteOption
 import com.emilioaugust.copypus.data.AppLanguage
@@ -56,10 +67,12 @@ import com.emilioaugust.copypus.data.PauseDuration
 import com.emilioaugust.copypus.data.SettingsViewModel
 import com.emilioaugust.copypus.ui.theme.ThemeMode
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel) {
+    val context = LocalContext.current
     val themeMode by viewModel.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
     val autoDelete by viewModel.autoDelete.collectAsState(initial = AutoDeleteOption.NEVER)
     val language by viewModel.language.collectAsState(initial = AppLanguage.ENGLISH)
@@ -175,6 +188,63 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                                 }
                             }
                         )
+                    }
+                }
+
+
+                // ABOUT
+                Spacer(modifier = Modifier.height(28.dp))
+                Text(text = stringResource(R.string.title_about_settings),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+
+                SettingsCard {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp, horizontal = 16.dp)) {
+                        Icon(Icons.Default.Info, contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp), tint = MaterialTheme.colorScheme.onTertiary)
+                        Text(stringResource(R.string.app_version_title))
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text("v${BuildConfig.VERSION_NAME}", modifier = Modifier.padding(end = 4.dp),
+                            color = Color.Gray)
+                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null)
+                    }
+
+                    HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                        .clickable {
+                            val intent = Intent(Intent.ACTION_SENDTO).apply { data = "mailto:emiliooaaugust@gmail.com".toUri() }
+                            context.startActivity(intent)
+
+                        }
+                    ) {
+                        Icon(Icons.Default.Feedback, contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp), tint = MaterialTheme.colorScheme.onTertiary)
+                        Text(stringResource(R.string.app_feedback_support_title))
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null)
+                    }
+
+                    HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                        .clickable {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/emilioaugust/Copypus".toUri()))
+                        }
+                    ) {
+                        Icon(Icons.Default.Code, contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp), tint = MaterialTheme.colorScheme.onTertiary)
+                        Text(stringResource(R.string.view_source_code_title))
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null)
                     }
                 }
             }
