@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="app/src/main/res/drawable/clipboard_icon.png" alt="текст" width="200">
+  <img src="app/src/main/res/drawable/copypus_icon.png" alt="текст" width="200">
 </p>
 
 <h1 align="center">
@@ -30,8 +30,6 @@
     <img src="app/src/main/res/drawable/cards_favorites_dark.jpg" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/delete_clipboard.gif" alt="Clipboards" style="width: 325px">
     <img src="app/src/main/res/drawable/empty_favorites.jpg" alt="Clipboards" style="width: 325px">
-    
-    
 </div>
 
 
